@@ -1,0 +1,7 @@
+## Interface: 40300
+## Title: Find Some Friends
+## Author: Cal Henderson (Bees on Hyjal-US)
+## Version: 1.0
+## SavedVariables: FindSomeFriendsDB
+
+FindSomeFriends.lua
