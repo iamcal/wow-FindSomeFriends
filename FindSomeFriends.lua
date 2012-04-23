@@ -17,6 +17,7 @@ FSF.default_options = {
 	invited = {},
 };
 FSF.waiting_on_whois = false;
+FSF.last_filter = '';
 FSF.invites_pending = {};
 
 
@@ -230,7 +231,7 @@ function FSF.ScanWho()
 		end
 	end
 
-	print(string.format("Scan: %d added, %d skipped, %d guilded, %d old", num_invite, num_dupe, num_guild, num_already_invited));
+	print(string.format("%s: %d added, %d skipped, %d guilded, %d old", FSF.last_filter, num_invite, num_dupe, num_guild, num_already_invited));
 
 	if (total > num) then
 		print("We found more matches than we can show - try narrowing your filter!");
@@ -243,6 +244,7 @@ function FSF.StartScan(filter)
 
 	FSF.StartWaiting();
 	SetWhoToUI(1);
+	FSF.last_filter = filter;
 	SendWho(filter);
 end
 
