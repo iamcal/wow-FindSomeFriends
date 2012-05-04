@@ -19,6 +19,8 @@ FSF.default_options = {
 FSF.waiting_on_whois = false;
 FSF.last_filter = '';
 FSF.invites_pending = {};
+FSF.all_buttons = {};
+FSF.last_btn_id = nil;
 
 
 function FSF.OnReady()
@@ -122,7 +124,7 @@ function FSF.CreateUIFrame()
 
 	-- add a main label - just so we can show something
 	FSF.Label = FSF.Cover:CreateFontString(nil, "OVERLAY");
-	FSF.Label:SetPoint("CENTER", FSF.UIFrame, "CENTER", 2, 0);
+	FSF.Label:SetPoint("CENTER", FSF.UIFrame, "CENTER", 2, -10);
 	FSF.Label:SetJustifyH("LEFT");
 	FSF.Label:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE");
 	FSF.Label:SetText(" ");
@@ -135,16 +137,20 @@ function FSF.CreateUIFrame()
 	local w = 60;
 	local h = 24;
 
-	FSF.CreateButton('btn1', FSF.UIFrame, pad+((w+pad)*0), pad+((h+pad)*0), w, h, "1-10" , function() FSF.StartScan("1-10" ); end);
-	FSF.CreateButton('btn2', FSF.UIFrame, pad+((w+pad)*1), pad+((h+pad)*0), w, h, "11-20", function() FSF.StartScan("11-20"); end);
-	FSF.CreateButton('btn3', FSF.UIFrame, pad+((w+pad)*2), pad+((h+pad)*0), w, h, "21-30", function() FSF.StartScan("21-30"); end);
+	FSF.CreateButton('btn1', FSF.UIFrame, pad+((w+pad)*0), pad+((h+pad)*0), w, h, "1-9"  , function() FSF.StartScan('btn1', "1-9"  ); end);
+	FSF.CreateButton('btn2', FSF.UIFrame, pad+((w+pad)*1), pad+((h+pad)*0), w, h, "10-19", function() FSF.StartScan('btn2', "10-19"); end);
+	FSF.CreateButton('btn3', FSF.UIFrame, pad+((w+pad)*2), pad+((h+pad)*0), w, h, "20-29", function() FSF.StartScan('btn3', "20-29"); end);
 
-	FSF.CreateButton('btn4', FSF.UIFrame, pad+((w+pad)*0), pad+((h+pad)*1), w, h, "31-40", function() FSF.StartScan("31-40"); end);
-	FSF.CreateButton('btn5', FSF.UIFrame, pad+((w+pad)*1), pad+((h+pad)*1), w, h, "41-50", function() FSF.StartScan("41-50"); end);
-	FSF.CreateButton('btn6', FSF.UIFrame, pad+((w+pad)*2), pad+((h+pad)*1), w, h, "51-60", function() FSF.StartScan("51-60"); end);
+	FSF.CreateButton('btn4', FSF.UIFrame, pad+((w+pad)*0), pad+((h+pad)*1), w, h, "30-39", function() FSF.StartScan('btn4', "30-39"); end);
+	FSF.CreateButton('btn5', FSF.UIFrame, pad+((w+pad)*1), pad+((h+pad)*1), w, h, "40-49", function() FSF.StartScan('btn5', "40-49"); end);
+	FSF.CreateButton('btn6', FSF.UIFrame, pad+((w+pad)*2), pad+((h+pad)*1), w, h, "50-59", function() FSF.StartScan('btn6', "50-59"); end);
 
-	FSF.CreateButton('btn7', FSF.UIFrame, pad, 130, 190, 30, "Just Invite", function() FSF.InviteNext(false); end);
-	FSF.CreateButton('btn8', FSF.UIFrame, pad, 165, 190, 30, "Whisper & Invite", function() FSF.InviteNext(true); end);
+	FSF.CreateButton('btn7', FSF.UIFrame, pad+((w+pad)*0), pad+((h+pad)*2), w, h, "60-69", function() FSF.StartScan('btn7', "60-69"); end);
+	FSF.CreateButton('btn8', FSF.UIFrame, pad+((w+pad)*1), pad+((h+pad)*2), w, h, "70-79", function() FSF.StartScan('btn8', "70-79"); end);
+	FSF.CreateButton('btn9', FSF.UIFrame, pad+((w+pad)*2), pad+((h+pad)*2), w, h, "80-89", function() FSF.StartScan('btn9', "80-89"); end);
+
+	FSF.CreateButton('btn10', FSF.UIFrame, pad, 130, 190, 30, "Just Invite", function() FSF.InviteNext(false); end);
+	FSF.CreateButton('btn11', FSF.UIFrame, pad, 165, 190, 30, "Whisper & Invite", function() FSF.InviteNext(true); end);
 end
 
 function FSF.CreateButton(id, parent, x, y, w, h, label, onclick)
@@ -167,6 +173,8 @@ function FSF.CreateButton(id, parent, x, y, w, h, label, onclick)
 
 	b:SetFrameLevel(129);
 	b:EnableMouse();
+
+	FSF.all_buttons[id] = b;
 end
 
 function FSF.SetFontSize(string, size)
@@ -209,6 +217,18 @@ end
 
 function FSF.ScanWho()
 
+	if (FSF.last_btn_id) then
+		local id, btn;
+		for id, btn in pairs(FSF.all_buttons) do
+			if (id == FSF.last_btn_id) then
+				btn.text:SetTextColor(1,1,1);
+			else
+				btn.text:SetTextColor(1,1,0);			
+			end
+		end
+		FSF.last_btn_id = nil;
+	end
+
 	local total, num = GetNumWhoResults();
 
 	local num_invite = 0;
@@ -240,11 +260,12 @@ function FSF.ScanWho()
 	FSF.StopWaiting();
 end
 
-function FSF.StartScan(filter)
+function FSF.StartScan(btn_id, filter)
 
 	FSF.StartWaiting();
 	SetWhoToUI(1);
 	FSF.last_filter = filter;
+	FSF.last_btn_id = btn_id;
 	SendWho(filter);
 end
 
