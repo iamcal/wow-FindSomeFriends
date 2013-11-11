@@ -1,4 +1,4 @@
-## Interface: 40300
+## Interface: 50300
 ## Title: Find Some Friends
 ## Author: Cal Henderson (Bees on Hyjal-US)
 ## Version: 1.0
