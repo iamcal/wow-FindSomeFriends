@@ -147,7 +147,7 @@ function FSF.CreateUIFrame()
 
 	FSF.CreateButton('btn7', FSF.UIFrame, pad+((w+pad)*0), pad+((h+pad)*2), w, h, "60-69", function() FSF.StartScan('btn7', "60-69"); end);
 	FSF.CreateButton('btn8', FSF.UIFrame, pad+((w+pad)*1), pad+((h+pad)*2), w, h, "70-79", function() FSF.StartScan('btn8', "70-79"); end);
-	FSF.CreateButton('btn9', FSF.UIFrame, pad+((w+pad)*2), pad+((h+pad)*2), w, h, "80-89", function() FSF.StartScan('btn9', "80-89"); end);
+	--FSF.CreateButton('btn9', FSF.UIFrame, pad+((w+pad)*2), pad+((h+pad)*2), w, h, "80-89", function() FSF.StartScan('btn9', "80-89"); end);
 
 	FSF.CreateButton('btn10', FSF.UIFrame, pad, 130, 190, 30, "Just Invite", function() FSF.InviteNext(false); end);
 	FSF.CreateButton('btn11', FSF.UIFrame, pad, 165, 190, 30, "Whisper & Invite", function() FSF.InviteNext(true); end);
@@ -155,7 +155,7 @@ end
 
 function FSF.CreateButton(id, parent, x, y, w, h, label, onclick)
 
-	local b = CreateFrame("Button", id, parent, "UIPanelButtonTemplate2");
+	local b = CreateFrame("Button", id, parent, "UIPanelButtonTemplate");
 	b:SetPoint("TOPLEFT", x, 0-y);
 	b:SetWidth(w);
 	b:SetHeight(h);
