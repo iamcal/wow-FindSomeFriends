@@ -151,6 +151,12 @@ function FSF.CreateUIFrame()
 
 	FSF.CreateButton('btn10', FSF.UIFrame, pad, 130, 190, 30, "Just Invite", function() FSF.InviteNext(false); end);
 	FSF.CreateButton('btn11', FSF.UIFrame, pad, 165, 190, 30, "Whisper & Invite", function() FSF.InviteNext(true); end);
+
+	if (_G.FindSomeFriendsDB.hide) then
+		FSF.UIFrame:Hide();
+	else
+		FSF.UIFrame:Show();
+	end
 end
 
 function FSF.CreateButton(id, parent, x, y, w, h, label, onclick)
@@ -198,7 +204,25 @@ end
 
 function FSF.OnClick(self, aButton)
 	if (aButton == "RightButton") then
-		print("show menu here!");
+
+		local menu_frame = CreateFrame("Frame", "menuFrame", UIParent, "UIDropDownMenuTemplate");
+		local menuList = {};
+
+		table.insert(menuList, {
+			text = "hide",
+			func = function()
+				if (_G.FindSomeFriendsDB.hide) then
+					FSF.Show();
+				else
+					FSF.Hide();
+				end
+			end,
+			isTitle = false,
+			checked = _G.FindSomeFriendsDB.hide,
+			disabled = false,
+		});
+
+		EasyMenu(menuList, menu_frame, "cursor", 0 , 0, "MENU");
 	end
 end
 
@@ -300,6 +324,33 @@ function FSF.DoInvite(name, whisper)
 	GuildInvite(name);
 end
 
+function FSF.Show()
+	_G.FindSomeFriendsDB.hide = false;
+	FSF.UIFrame:Show();
+end
+
+function FSF.Hide()
+	_G.FindSomeFriendsDB.hide = true;
+	FSF.UIFrame:Hide();
+end
+
+-- ##################################################################
+
+function FSF.SlashCommand(msg, editbox)
+	if (msg == "show") then
+		FSF.Show();
+	elseif (msg == "hide") then
+		FSF.Hide();
+	else
+		print("Unknown command - try show or hide");
+	end
+end
+
+SLASH_FSF1 = "/fsf";
+
+SlashCmdList["FSF"] = FSF.SlashCommand;
+
+-- ##################################################################
 
 FSF.EventFrame = CreateFrame("Frame");
 FSF.EventFrame:Show();
