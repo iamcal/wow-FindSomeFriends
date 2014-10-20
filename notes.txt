@@ -1,0 +1,2 @@
+to get invited count:
+/run local i=0;for k in pairs(FindSomeFriendsDB.invited) do i=i+1; end;print(i)
